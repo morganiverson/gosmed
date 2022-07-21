@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "gosmed",
+    "slug": "gosmed",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "gosmed"
+}
