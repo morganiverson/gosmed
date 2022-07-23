@@ -1,0 +1,8 @@
+{
+    "billboard_top_100_gospel": {
+        "name": "Billboard Top 100 Gospel Songs",
+        "source_url": "http://charts.bdsradio.com/bdsradiocharts/charts.aspx?formatid=39&_ga=2.39701734.458411794.1658520719-937168622.1658520719#C01", 
+        "platform": "spotify", 
+        "search_query": "https://api.spotify.com/v1/playlists/2XwIpwg8n1lrn8d7Yyui1b"
+    }
+}

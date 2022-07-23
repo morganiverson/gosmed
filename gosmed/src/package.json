@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "dependencies": {
+    "danfojs": "^1.1.1",
+    "danfojs-node": "^1.1.1",
+    "https": "^1.0.0",
+    "node-fetch": "^3.2.9",
+    "react-d3-library": "^1.1.8"
+  }
+}
