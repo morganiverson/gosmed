@@ -1,9 +1,8 @@
 import fetch from "node-fetch"
 import credentials from "./credentials.json" assert {type: 'json'};
-import { getQueryString } from "./util.js"
+import { getQueryString, getSearchQuery, separator } from "./util.js"
 
 const ENDPOINT = "https://api.spotify.com/v1/search";
-const SEP = 70
 
 // album, artist, track, year, upc, tag:hipster, tag:new, isrc, and genre
 let query = {
@@ -18,41 +17,30 @@ let query = {
     "limit": 5, 
 }
 // MORE END POINTS: 
-function fetchFrom(ENDPOINT, QUERY, AUTHENTICATION_TOKEN) {
+function fetchFromSpotify(ENDPOINT, QUERY, AUTHENTICATION_TOKEN) {
 
-  let QUERY_STRING, SEARCH_QUERY = ""
-  if(QUERY) {
-    console.log("Query: \n" + JSON.stringify(QUERY, null, 2))
-    console.log("=".repeat(SEP))
-
-    QUERY_STRING = getQueryString(QUERY);
-    SEARCH_QUERY = ENDPOINT + "?q=" + QUERY_STRING
-
-    console.log("Formatted Query: \n" + SEARCH_QUERY)
-    console.log("=".repeat(SEP))
-  }
-  else {
-    console.log("No Query Details Provided...")
-    SEARCH_QUERY = ENDPOINT
-    console.log("=".repeat(SEP))
-  }
+  const SEARCH_QUERY = getSearchQuery(ENDPOINT, QUERY)
   
-  console.log("Initiating Search Request...")
+  console.log("Initiating Spotify Request...")
 
-  return fetch(SEARCH_QUERY, {
-      method: "GET",
-      headers: {
-          Authorization: `Bearer ${AUTHENTICATION_TOKEN}`
-      }
-    })
-    .then(res => res.json())
-    .then(res => {
-      return res
-    })
-        
+  if(AUTHENTICATION_TOKEN == null) {
+		return Promise.reject(new Error("Missing AUTHENTICATION_TOKEN!"));
+	}
+	else {
+    return fetch(SEARCH_QUERY, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${AUTHENTICATION_TOKEN}`
+        }
+      })
+      .then(res => res.json())
+      .then(res => { return res })
+      .catch(e => { return Promise.reject(e) })
+  }    
 }
 
-function getAccessToken(credentials){
+function getSpotifyAccessToken(credentials){
+  separator()
     console.log("Retriving Access Token...")
 
     let auth_body = {
@@ -60,7 +48,6 @@ function getAccessToken(credentials){
         client_secret : credentials.client_secret, 
         grant_type: "client_credentials"
     }
-
 
     var auth_options = {
         method: "POST",
@@ -74,65 +61,58 @@ function getAccessToken(credentials){
     return fetch("https://accounts.spotify.com/api/token", auth_options)
     .then(res => res.json())
     .then(res => {
-        // console.log(JSON.stringify(res, null, 2))
-        return res.access_token
+      console.log("Success!")
+      separator()
+      return res.access_token
     })
+    .catch(e => {return Promise.reject(e)})
 }
 
 /************************************************************************** */
 /* MAKE SPOTIFY REQUEST GIVEN ENDPOINT AND QUERY STRING */
+/* Get Access Token and Return Requested Data or Error */
 /************************************************************************** */
 function makeSpotifyRequest(ENDPOINT, QUERY){
-  console.log("=".repeat(SEP))
-  console.log("Retriving Spotify Credentials...")
-  let spotify_credentials = credentials.spotify
-
-  return getAccessToken(spotify_credentials)
+  separator()
+console.log("Initiating Spotify Request...")
+  return getSpotifyAccessToken(credentials.spotify)
   .then(AUTHENTICATION_TOKEN => {
-    if(AUTHENTICATION_TOKEN) {
-    console.log("Success!")
-    console.log("=".repeat(SEP))
-
-    return fetchFrom(ENDPOINT, QUERY, AUTHENTICATION_TOKEN)
-    .then(res => {
-      return res
-    })
-      // .then(res => handleSearchResults(res))
-      // .then(res => console.log(res, null, 2))
-    }
+    return fetchFromSpotify(ENDPOINT, QUERY, AUTHENTICATION_TOKEN)
+    .then(res => { return res })
+    .catch(e => { return Promise.reject(e) })
   })
 }
+
 
 const gospel_playlist_query = {
   "id": "2XwIpwg8n1lrn8d7Yyui1b"
 }
 
-// makeSpotifyRequest("https://api.spotify.com	/v1/search)
-// .then(res => {
-//   console.log((res))
-// })
+makeSpotifyRequest("https://api.spotify.com	/v1/search", query)
+.then(res => {
+  console.log((res))
+})
 
 function getSpoitfyPlaylist(PLAYLIST_ID) {
   return makeSpotifyRequest("https://api.spotify.com/v1/playlists/" + PLAYLIST_ID)
   .then(res => {
     return res
-  // console.log((res))
 })
 }
 
-getSpoitfyPlaylist(gospel_playlist_query.id)
-.then(playlist => {
-    return {
-      "id": playlist.id,
-      "name": playlist.name, 
-      "author": playlist.owner.display_name,
-      "tracklist": playlist.tracks.items, 
-      "image": playlist.images[0], 
-      "description": playlist.description,
-    }
-})
-.then(res => res.tracklist)
-.then(res => {
+// getSpoitfyPlaylist(gospel_playlist_query.id)
+// .then(playlist => {
+//     return {
+//       "id": playlist.id,
+//       "name": playlist.name, 
+//       "author": playlist.owner.display_name,
+//       "tracklist": playlist.tracks.items, 
+//       "image": playlist.images[0], 
+//       "description": playlist.description,
+//     }
+// })
+// .then(res => res.tracklist)
+// .then(res => {
 
-  console.log(res[0])
-})
+//   console.log(res[0])
+// })

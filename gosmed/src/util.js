@@ -18,3 +18,33 @@ function handleSearchResults(results) {
 
 
 }
+
+
+export const getSearchQuery = (ENDPOINT, QUERY)  => {
+	let QUERY_STRING, SEARCH_QUERY = ""
+    console.log("Generating Query String...")
+    separator()
+
+	if(QUERY) {
+		console.log("Query: \n" + JSON.stringify(QUERY, null, 2))
+		separator()
+	
+		QUERY_STRING = getQueryString(QUERY);
+		SEARCH_QUERY = ENDPOINT + "?q=" + QUERY_STRING
+
+	  }
+	  else {
+		console.log("No Query Details Provided...")
+		SEARCH_QUERY = ENDPOINT
+		separator()
+	  }
+
+      console.log("Full Endpoint Path Generated:\n" + SEARCH_QUERY)
+      separator()
+
+	  return SEARCH_QUERY
+}
+
+export function separator() {
+    console.log("=".repeat(80))
+}
