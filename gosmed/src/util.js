@@ -20,7 +20,7 @@ function handleSearchResults(results) {
 }
 
 
-export const getSearchQuery = (ENDPOINT, QUERY)  => {
+export const getSearchQuery = (ENDPOINT, QUERY, qAttribute)  => {
 	let QUERY_STRING, SEARCH_QUERY = ""
     console.log("Generating Query String...")
     separator()
@@ -28,9 +28,10 @@ export const getSearchQuery = (ENDPOINT, QUERY)  => {
 	if(QUERY) {
 		console.log("Query: \n" + JSON.stringify(QUERY, null, 2))
 		separator()
-	
+
 		QUERY_STRING = getQueryString(QUERY);
-		SEARCH_QUERY = ENDPOINT + "?q=" + QUERY_STRING
+        
+        SEARCH_QUERY = ENDPOINT + (qAttribute ? "?q=" : "?") + QUERY_STRING
 
 	  }
 	  else {
