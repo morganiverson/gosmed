@@ -1,64 +1,52 @@
 // import { makeSpotifyRequest } from "./spotify"
-import { makeYoutubeRequest, handleXYoutubeRequest } from "./youtube.js"
-
+import { makeYoutubeRequest, youtubeSearchByKeyword, handleYoutubeVideoResponse } from "./youtube.js"
+import { YoutubeQuery } from "./class.js"
 import { separator } from "./util.js"
-/**
- * Your request can also use the Boolean NOT (-) and OR (|) operators 
- * to exclude videos or to find videos that are associated with one of 
- * several search terms. For example, to search for videos matching 
- * either "boating" or "sailing", set the q parameter value to 
- * boating|sailing. Similarly, to search for videos matching either 
- * "boating" or "sailing" but not "fishing", set the q parameter 
- * value to boating|sailing -fishing. Note that the pipe character 
- * must be URL-escaped when it is sent in your API request. 
- * The URL-escaped value for the pipe character is %7C.
- */
-// Youtube Topic Ids: https://gist.github.com/stpe/2951130dfc8f1d0d1a2ad736bef3b703
-// "/m/06bvp | Religion"
-// "/m/02mscn Christian music"
+import * as fs from 'fs'
 
 
-let youtubeQuery = {
-		maxResults: 5,
-		type: 'video',
-		videoDefinition: 'high',
-		q: "bible study", //searchTerm,
-		// safeSearch: "none", 
-		// topicId: "", 
-		// videoCategoryId: "", 
-		order: "rating" //"rating", "viewCount"
-}
+console.log("Youtube Request Test")
+let writeTestReults = {}
 
-const youtubeEndpoint = 'https://www.googleapis.com/youtube/v3/search';
-
-console.log("Request 1")
-makeYoutubeRequest(youtubeEndpoint, youtubeQuery, true)
-.then(res => {
-	const videos = res.items.map(item => item.id.videoId)
-	console.log(videos)
-	// handleXYoutubeRequest(res)
-
-	videos.forEach(video => {
-		makeYoutubeRequest("https://www.googleapis.com/youtube/v3/videos", { part: "snippet", id: video}, false)
-		.then(res => res.items[0])
-		.then(res => res.snippet)
-		.then(res => {
-			return {
-				videoTitle: res.title, 
-				channelTitle: res.channelTitle, 
-				image: res.thumbnails.default}
-		})
-		.then(res => {
-			console.log(res)
-		})
-	})
-})
-.catch(e => {
-	console.log("Error Completing Youtube Request: " + e.message)
+let bible_study = youtubeSearchByKeyword(new YoutubeQuery("bible study", "video"), handleYoutubeVideoResponse)
+.then(response => {
 	separator()
+	console.log("Youtube Query Response: \n", response)
+	writeTestReults["Bible Study"] = response
 })
 
+let motivation = youtubeSearchByKeyword(new YoutubeQuery("christian motivational speeches", "video"), handleYoutubeVideoResponse)
+.then(response => {
+	separator()
+	console.log("Youtube Query Response: \n", response)
+	writeTestReults["Motivation"] = response
+})
 
-// let q = {q: { test: 1}}
-// console.log(encodeURIComponent(JSON.stringify(q)))
+let worship = youtubeSearchByKeyword(new YoutubeQuery("christian gospel worship music video", "video"), handleYoutubeVideoResponse)
+.then(response => {
+	separator()
+	console.log("Youtube Query Response: \n", response)
+	writeTestReults["Worship Music"] = response
+})
 
+let sermon = youtubeSearchByKeyword(new YoutubeQuery("christian bible sermon church", "video"), handleYoutubeVideoResponse)
+.then(response => {
+	separator()
+	console.log("Youtube Query Response: \n", response)
+	writeTestReults["Sunday Sermon"] = response
+})
+
+const FILE_PATH = "data/youtube.json"
+
+Promise.all([bible_study, motivation, worship, sermon])
+.then(() => {
+	separator()
+
+	console.log("Writing Youtube Search Results to " + FILE_PATH)
+
+	const str = JSON.stringify(writeTestReults, null, 2)
+	fs.writeFileSync(FILE_PATH, str)
+	
+	separator()
+	console.log(str)
+})

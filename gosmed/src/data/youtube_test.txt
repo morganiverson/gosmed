@@ -1,0 +1,140 @@
+{
+  videoDefinition: 'high',
+  safeSearch: 'strict',
+  q: 'dog',
+  type: 'video',
+  order: 'viewCount',
+  maxResults: 5
+}
+Youtube Request Test
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "videoDefinition": "high",
+  "safeSearch": "strict",
+  "q": "bible study",
+  "type": "video",
+  "order": "viewCount",
+  "maxResults": 5,
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/search?q=videoDefinition=high&safeSearch=strict&q=bible%20study&type=video&order=viewCount&maxResults=5&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+Getting Video Information...
+================================================================================
+VIDEO IDS: 
+ [
+  'LloFz5fl0Wg',
+  'ObRSgJW0Oig',
+  'zBPSUjphjSY',
+  'ymW9shpik94',
+  '3pbCddmE_OQ'
+]
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "part": "snippet",
+  "id": "LloFz5fl0Wg",
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/videos?part=snippet&id=LloFz5fl0Wg&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "part": "snippet",
+  "id": "ObRSgJW0Oig",
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/videos?part=snippet&id=ObRSgJW0Oig&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "part": "snippet",
+  "id": "zBPSUjphjSY",
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/videos?part=snippet&id=zBPSUjphjSY&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "part": "snippet",
+  "id": "ymW9shpik94",
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/videos?part=snippet&id=ymW9shpik94&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+Initialiting Youtube Request...
+================================================================================
+Retriving Youtube API Token...
+Successfully Retrieve API Key!
+================================================================================
+Generating Query String...
+================================================================================
+Query: 
+{
+  "part": "snippet",
+  "id": "3pbCddmE_OQ",
+  "key": "AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E"
+}
+================================================================================
+Full Endpoint Path Generated:
+https://www.googleapis.com/youtube/v3/videos?part=snippet&id=3pbCddmE_OQ&key=AIzaSyAs94fkounWhYzIKeZt1u7c_jYIkWJG07E
+================================================================================
+Initiating Youtube Request...
+================================================================================
+Youtube Query Response: 
+ [
+  "'Focus on God, not your problems' by 'In Touch Ministries'",
+  "'Matthew Bible Study - #1 - Introduction to Matthew's Gospel | Mike Mazzalongo | BibleTalk.tv' by 'BibleTalk.tv'",
+  "'Holy Bible Audio: PROVERBS  1 to 31 - With Text (Contemporary English)' by 'Holy Bible'",
+  "'How I Study My Bible + In-Depth Bible Study!' by 'Coffee and Bible Time'",
+  "'Leakers, Bible Study, Trump Polls | Overtime with Bill Maher (HBO)' by 'Real Time with Bill Maher'"
+]

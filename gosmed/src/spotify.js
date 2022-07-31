@@ -83,7 +83,6 @@ console.log("Initiating Spotify Request...")
   })
 }
 
-
 const gospel_playlist_query = {
   "id": "2XwIpwg8n1lrn8d7Yyui1b"
 }

@@ -4,37 +4,8 @@ import credentials from "./credentials.json" assert {type: 'json'};
 import { getSearchQuery, separator } from "./util.js"
 
 const END_POINT = 'https://www.googleapis.com/youtube/v3/search';
- 
-/**
- * const fetchSearchRequest = (searchTerm) => {
-  return {
-    type: "FETCH_SEARCH_REQUEST",
-    searchTerm,
-  };
-};
 
- const fetchSearchSuccess = (data) => {
-  return {
-    type: "FETCH_SEARCH_SUCCESS",
-    data,
-  }
-}
 
- const fetchSearchFailure = (message) => {
-  return {
-    type: "FETCH_SEARCH_FAILURE",
-    message,
-  };
-};
-
-const queryStringFromObj = (data) => {
-	const str = Object.keys(data).map(key => (
-	  `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-	));
-  
-	return str.join('&');
-  };
- **/ 
   let QUERY = {
 	maxResults: 5,
 	type: 'video',
@@ -103,11 +74,64 @@ export function noQueryYoutubeRequest(ENDPOINT) {
 	}
 
 }
-export function handleXYoutubeRequest(res) {
-	console.log(res)
+
+//  COMPLETE YOUTUBE VIDEO SEARCH BY KEYWORD
+export function youtubeSearchByKeyword(youtubeQueryObject, handler) {
+	const YOUTUBE_ENDPOINT = 'https://www.googleapis.com/youtube/v3/search';
+
+	return makeYoutubeRequest(YOUTUBE_ENDPOINT, youtubeQueryObject.getQuery(), true)
+	.then(res => { 
+		return handler(res)
+	})
+	.catch(e => {
+		separator()
+		console.log("Error Completing Youtube Request: " + e.message)
+		separator()
+	})
+}
+
+// # EXTRACT SPECIFIC DATA FROM YOUTUBE VIDEO LISTING
+export async function handleYoutubeVideoResponse(youtubeResponse) {
+	console.log("Getting Video Information...")
+	separator()
+	const videos = youtubeResponse.items.map(item => item.id.videoId)
+	console.log("VIDEO IDS: \n", videos)
+
+	let videoDetails = await Promise.all(videos.map(async video => {
+		return makeYoutubeRequest("https://www.googleapis.com/youtube/v3/videos", { part: "snippet", id: video}, false)
+		.then(res => res.items[0])
+		.then(res => res.snippet)
+		.then(res => {
+			return "'" + res.title + "' by '" + res.channelTitle + "'"
+			// {
+			// 	videoTitle: res.title, 
+			// 	channelTitle: res.channelTitle, 
+			// 	image: res.thumbnails.default
+			// }
+		})
+		.then (res => { return res })
+		.catch(e => { return  Promise.reject(e.message) })
+	}))
+
+	return videoDetails
 }
 
 // module.exports = {
 // 	makeYoutubeRequest, 
 // 	handleXYoutubeRequest
 // }
+
+/**
+ * Your request can also use the Boolean NOT (-) and OR (|) operators 
+ * to exclude videos or to find videos that are associated with one of 
+ * several search terms. For example, to search for videos matching 
+ * either "boating" or "sailing", set the q parameter value to 
+ * boating|sailing. Similarly, to search for videos matching either 
+ * "boating" or "sailing" but not "fishing", set the q parameter 
+ * value to boating|sailing -fishing. Note that the pipe character 
+ * must be URL-escaped when it is sent in your API request. 
+ * The URL-escaped value for the pipe character is %7C.
+ */
+// Youtube Topic Ids: https://gist.github.com/stpe/2951130dfc8f1d0d1a2ad736bef3b703
+// "/m/06bvp | Religion"
+// "/m/02mscn Christian music"

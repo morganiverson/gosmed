@@ -1,0 +1,15 @@
+Home Page
+* List: Podcasts, Music, Youtube Videos
+	- Include previes of most popular content 
+	- Link to "See More..."
+* Each Category
+	- Futher Split
+		* All: Most Popular, Newest
+		* Podcasts: Women, Teens, Men
+		* Youtube (Video): Bible Study, Motivation, Sunday Sermon, (!)Channels/Influencers, Worship Music
+		* Spotify (Music): (Genre) R&B, Contemporary, Acapella, Rap, 
+
+
+07/30
+- Youtube search function by keyword (most popular) -> json
+- Spotify Music Search Split into genre -> spotify_[genre].json
