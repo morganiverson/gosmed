@@ -13,3 +13,6 @@ Home Page
 07/30
 - Youtube search function by keyword (most popular) -> json
 - Spotify Music Search Split into genre -> spotify_[genre].json
+
+
+https://open.spotify.com/genre/christian-playlists

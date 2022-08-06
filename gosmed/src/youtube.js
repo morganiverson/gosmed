@@ -1,18 +1,11 @@
 // Play YT Videos In App: https://www.npmjs.com/package/react-native-youtube
 import fetch from "node-fetch";
-import credentials from "./credentials.json" assert {type: 'json'};
+import credentials from "./data/credentials.json" assert {type: 'json'};
 import { getSearchQuery, separator } from "./util.js"
 
 const END_POINT = 'https://www.googleapis.com/youtube/v3/search';
 
-
-  let QUERY = {
-	maxResults: 5,
-	type: 'video',
-	videoDefinition: 'high',
-	q: "dog", //searchTerm
-};
-
+// GET API TOEKN FROM CREDENTIALS FILE
 function getYoutubeAPIToken(credentials){
 	separator()
     console.log("Retriving Youtube API Token...")
@@ -29,6 +22,7 @@ function getYoutubeAPIToken(credentials){
 	return API_KEY
 }
 
+// FETCH RAW RESULTS FROM YOUTUBE 
 function fetchFromYoutube(ENDPOINT, QUERY, API_KEY, qAttribute){
 	if(QUERY) QUERY.key = API_KEY;
 
@@ -58,7 +52,7 @@ export function makeYoutubeRequest(ENDPOINT, QUERY, qAttribute) {
 		.catch(e => { return Promise.reject(e) })
 	}
 }
- 
+//  FETCH RAW RESULTS FROM YOUTUBE WITH NO QUERY
 export function noQueryYoutubeRequest(ENDPOINT) {
 	console.log("Initialiting Youtube Request...")
 
@@ -116,10 +110,6 @@ export async function handleYoutubeVideoResponse(youtubeResponse) {
 	return videoDetails
 }
 
-// module.exports = {
-// 	makeYoutubeRequest, 
-// 	handleXYoutubeRequest
-// }
 
 /**
  * Your request can also use the Boolean NOT (-) and OR (|) operators 

@@ -6,5 +6,9 @@
 	{
 		"category": "Gospel", 
 		"endpoint": "https://www.bdsradio.com/clientUploads/bdsradiocharts/39.html?cacheBuster=B89686F195B9475BB1D6E26C4945697"
+	}, 
+	{
+		"category": "Gospel Hip Hop", 
+		"endpoint": "https://www.bdsradio.com/clientUploads/pdfs/internet_ChristianHipHop.pdf?cacheBuster=1991A2B0913F458FA3D24D0768558A1"
 	}
 ]

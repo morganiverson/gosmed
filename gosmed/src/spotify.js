@@ -1,21 +1,9 @@
 import fetch from "node-fetch"
-import credentials from "./credentials.json" assert {type: 'json'};
+import credentials from "./data/credentials.json" assert {type: 'json'};
 import { getQueryString, getSearchQuery, separator } from "./util.js"
 
 const ENDPOINT = "https://api.spotify.com/v1/search";
 
-// album, artist, track, year, upc, tag:hipster, tag:new, isrc, and genre
-let query = {
-    "name": "Gospel Airplay",
-    "artist": "", 
-    "album": "", 
-    "track": "", 
-    "year": "", 
-    "upc":"", 
-    "genre": "",
-    "type" : "playlist", 
-    "limit": 5, 
-}
 // MORE END POINTS: 
 function fetchFromSpotify(ENDPOINT, QUERY, AUTHENTICATION_TOKEN) {
 
@@ -62,6 +50,7 @@ function getSpotifyAccessToken(credentials){
     .then(res => res.json())
     .then(res => {
       console.log("Success!")
+      // console.log(res)
       separator()
       return res.access_token
     })
@@ -74,30 +63,57 @@ function getSpotifyAccessToken(credentials){
 /************************************************************************** */
 function makeSpotifyRequest(ENDPOINT, QUERY){
   separator()
-console.log("Initiating Spotify Request...")
+  console.log("Initiating Spotify Request...")
   return getSpotifyAccessToken(credentials.spotify)
-  .then(AUTHENTICATION_TOKEN => {
-    return fetchFromSpotify(ENDPOINT, QUERY, AUTHENTICATION_TOKEN)
-    .then(res => { return res })
-    .catch(e => { return Promise.reject(e) })
-  })
+        .then(AUTHENTICATION_TOKEN => {
+			return fetchFromSpotify(ENDPOINT, QUERY, AUTHENTICATION_TOKEN)
+					.then(res => { return res })
+					.catch(e => { return Promise.reject(e) })
+})
 }
 
 const gospel_playlist_query = {
   "id": "2XwIpwg8n1lrn8d7Yyui1b"
 }
 
-makeSpotifyRequest("https://api.spotify.com	/v1/search", query)
-.then(res => {
-  console.log((res))
-})
+// makeSpotifyRequest("https://api.spotify.com	/v1/search", query)
+// .then(res => {
+//   console.log((res))
+// })
 
-function getSpoitfyPlaylist(PLAYLIST_ID) {
+export function spotifyPlaylistRequest(PLAYLIST_ID, handler) {
   return makeSpotifyRequest("https://api.spotify.com/v1/playlists/" + PLAYLIST_ID)
-  .then(res => {
-    return res
-})
+  .then(res => {handler(res)})
 }
+
+export function handleSpotifyPlaylistResponse(res) {
+	let [playlistName, songs] = [res.name, res.tracks.items]
+	
+		songs = songs.slice(0, 5).map(song => {
+			// return {
+			// 	"name": song.track.name,
+			// 	"artist": song.track.artists.map(artist => artist.name).join(",")
+			// } 
+			return song.track.name + " [by " + song.track.artists.map(artist => artist.name).join(",") + "]"
+		})
+		// console.log(songs)
+	
+}
+
+
+export function spotifySearchByKeyword(spotifyQueryObject, handler) {
+  makeSpotifyRequest("https://api.spotify.com/v1/search", spotifyQueryObject.getQuery())
+  .then(res => handler(res))
+}
+
+export function handleSpotifyPodcastResponse(res) {
+	console.log(res.shows.items.map(item => item.name + " [by " + item.publisher + "]"))
+}
+/** 
+// function spotifyPodcastSearchByKeyword(spotifyQueryObject, handler) {
+
+// }
+
 
 // getSpoitfyPlaylist(gospel_playlist_query.id)
 // .then(playlist => {
@@ -115,3 +131,4 @@ function getSpoitfyPlaylist(PLAYLIST_ID) {
 
 //   console.log(res[0])
 // })
+**/

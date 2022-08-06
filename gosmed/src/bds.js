@@ -4,10 +4,13 @@ const { JSDOM } = jsdom;
 import * as fs from 'fs'
 // const endpoint = "https://www.bdsradio.com/clientUploads/bdsradiocharts/21.html?cacheBuster=B89686F195B9475BB1D6E26C4945697"
 // const CATEGORY = "Christian AC"
-import BDS from "./bds_source.json" assert { type: "json"}
+import BDS from "./data/bds_source.json" assert { type: "json"}
 
-console.log(BDS)
-BDS.forEach(src => {
+let src = BDS.filter(item => item["category"] == "Gospel Hip Hop")
+console.log(src)
+
+
+src.forEach(src => {
 	const ENDPOINT = src["endpoint"]
 	const CATEGORY = src["category"]
 

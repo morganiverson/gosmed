@@ -1,52 +1,37 @@
 // import { makeSpotifyRequest } from "./spotify"
 import { makeYoutubeRequest, youtubeSearchByKeyword, handleYoutubeVideoResponse } from "./youtube.js"
-import { YoutubeQuery } from "./class.js"
+import { spotifySearchByKeyword, handleSpotifyPodcastResponse, spotifyPlaylistRequest, handleSpotifyPlaylistResponse } from "./spotify.js"
+import { YoutubeQuery, SpotifyQuery } from "./class.js"
+
 import { separator } from "./util.js"
 import * as fs from 'fs'
 
+import spotify_top_gospel from "./data/spotify_source.json" assert {type: "json"}
 
-console.log("Youtube Request Test")
-let writeTestReults = {}
 
-let bible_study = youtubeSearchByKeyword(new YoutubeQuery("bible study", "video"), handleYoutubeVideoResponse)
-.then(response => {
-	separator()
-	console.log("Youtube Query Response: \n", response)
-	writeTestReults["Bible Study"] = response
+console.log("Spotify Request Test")
+let writeTestResults = {}
+
+// youtubeSearchByKeyword(new YoutubeQuery("bible study", "video"), handleYoutubeVideoResponse)
+
+
+// spotifySearchByKeyword(new SpotifyQuery("christian", "show", 25), handleSpotifyPodcastResponse)
+let top_gospel = spotify_top_gospel.map(playlist => {
+	return spotifyPlaylistRequest(playlist["playlist_id"], (res) => {
+		let [playlistName, songs] = [res.name, res.tracks.items]
+		songs = songs.slice(0, 5).map(song => {
+			return song.track.name + " [by " + song.track.artists.map(artist => artist.name).join(",") + "]"
+		})
+		writeTestResults[playlist["category"]] = songs
+	})
 })
 
-let motivation = youtubeSearchByKeyword(new YoutubeQuery("christian motivational speeches", "video"), handleYoutubeVideoResponse)
-.then(response => {
-	separator()
-	console.log("Youtube Query Response: \n", response)
-	writeTestReults["Motivation"] = response
-})
 
-let worship = youtubeSearchByKeyword(new YoutubeQuery("christian gospel worship music video", "video"), handleYoutubeVideoResponse)
-.then(response => {
-	separator()
-	console.log("Youtube Query Response: \n", response)
-	writeTestReults["Worship Music"] = response
-})
 
-let sermon = youtubeSearchByKeyword(new YoutubeQuery("christian bible sermon church", "video"), handleYoutubeVideoResponse)
-.then(response => {
-	separator()
-	console.log("Youtube Query Response: \n", response)
-	writeTestReults["Sunday Sermon"] = response
-})
 
-const FILE_PATH = "data/youtube.json"
-
-Promise.all([bible_study, motivation, worship, sermon])
+// console.log(top_gospel)
+Promise.all(top_gospel)
 .then(() => {
-	separator()
-
-	console.log("Writing Youtube Search Results to " + FILE_PATH)
-
-	const str = JSON.stringify(writeTestReults, null, 2)
-	fs.writeFileSync(FILE_PATH, str)
-	
-	separator()
-	console.log(str)
+	fs.writeFileSync("./data/spotify_gospel.json", JSON.stringify(writeTestResults, null, 2))
 })
+
